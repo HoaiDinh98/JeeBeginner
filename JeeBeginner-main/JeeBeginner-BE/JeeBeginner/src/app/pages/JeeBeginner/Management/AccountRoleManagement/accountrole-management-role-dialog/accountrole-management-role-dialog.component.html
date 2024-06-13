@@ -1,0 +1,128 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title h4" id="example-modal-sizes-title-lg">
+      <span class="dialog-title">{{ getTitle()}}
+      </span>
+    </div>
+    <div class="modal-title" style="display: inline; flex: 2;">
+      <!-- <button [disabled]="isLoadingSubmit$ | async" [class.spinner]="isLoadingSubmit$ | async" mat-raised-button
+        style="float: right; margin: 0" class="ja_btn-addnew  " (click)="luuQuyen(false)">{{'COMMOM.LUU' |
+        translate}}</button>
+      <button mat-raised-button style="float: right; margin: 0; margin-right: 12px;" class="ja_btn-goback "
+        (click)="goBack()">{{'COMMOM.TROLAI' | translate}}</button> -->
+    </div>
+  </div>
+
+
+
+
+      <div class="overlay overlay-block cursor-default modal-body overflow-auto"
+        style="min-height: 404px; max-height: 90vh;">
+        <ng-container *ngIf="accountroleManagementService.isLoading$ | async">
+          <div class="overlay-layer bg-transparent">
+            <div class="spinner spinner-lg spinner-success"></div>
+          </div>
+        </ng-container>
+        <ng-container>
+
+          <div class="card card-custom gutter-b">
+            <div class="card-body">       
+              <div class="table-responsive angular-bootstrap-table" [ngStyle]="{ height: getHeight() }">
+                <table mat-table class=" table table-head-custom table-vertical-center overflow-hidden"
+                  [dataSource]="item">
+                  <ng-container matColumnDef="stt">
+                    <th *matHeaderCellDef class="mat-column-vinCode">
+                      <span>STT</span>
+                      <app-sort-icon column="stt" [activeColumn]="sorting.column" [activeDirection]="sorting.direction"
+                        (sort)="sort($event)"></app-sort-icon>
+                    </th>
+                    <td mat-cell *matCellDef="let r; let i = index">
+                      <span>{{ i + 1}}</span>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Id_Permit">
+                    <th *matHeaderCellDef class="mat-column-vinCode">
+                      <span>Id_Permit</span>
+                      <app-sort-icon column="Id_Permit"></app-sort-icon>
+                    </th>
+                    <td mat-cell *matCellDef="let r">
+                      <span>{{r.Id_Permit}}</span>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Tenquyen">
+                    <th *matHeaderCellDef class="mat-column-vinCode">
+                      <span>Tenquyen</span>
+                      <app-sort-icon column="Tenquyen" [activeColumn]="sorting.column" [activeDirection]="sorting.direction"
+                        (sort)="sort($event)"></app-sort-icon>
+                    </th>
+                    <td mat-cell *matCellDef="let r">
+                      <span>{{r.Tenquyen}}</span>
+                    </td>
+                  </ng-container>
+
+                  <!-- <ng-container matColumnDef="Edit">
+                    <th mat-header-cell *matHeaderCellDef class="mat-column-vinCode"
+                      style="width: 10%; text-align: center;">
+                      <mat-checkbox  (change)="masterToggle1($event)" >
+                      </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let r" class="mat-column-vinCode" style="text-align: center;">
+                      <mat-checkbox (change)="changeChinhSua($event,r)" 
+                        [checked]="r.Edit">
+                      </mat-checkbox>
+                    </td>
+                  </ng-container> -->
+                  <ng-container matColumnDef="Edit">
+                    <th mat-header-cell *matHeaderCellDef class="mat-column-vinCode"
+                      style="width: 10%; text-align: center;">
+                      <mat-checkbox  (change)="masterToggle1($event)" >
+                      </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let r" class="mat-column-vinCode" style="text-align: center;">
+                      <mat-checkbox #checkbox [id]="'checkbox-' + r.Id_Permit" 
+                      [checked]="r.Edit || isUserInRole4(r.Id_Permit)" > 
+                      </mat-checkbox>
+                    </td>
+                    <!-- && isUserInRole4(r.Id_Permit) -->
+                  </ng-container>
+                  <ng-container matColumnDef="IsReadPermit">
+                    <th mat-header-cell *matHeaderCellDef class="mat-column-vinCode"
+                      style="width: 10%; text-align: center;">
+                      <mat-checkbox  (change)="masterToggle1($event)" > Chỉ xem
+                      </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let r" class="mat-column-vinCode" style="text-align: center;">
+                      <ng-container *ngIf="r.IsReadPermit">
+                        <mat-checkbox #readOnlyCheckbox [id]="'readOnlyCheckbox-' + r.Id_Permit"  [checked]="isUserInRole(r.Id_Permit)"  (change)="changeChinhSua2($event,r)" ></mat-checkbox>
+                    </ng-container>
+                    </td>
+                  </ng-container>
+                  
+                  <!-- <mat-checkbox [checked]="!isUserInRole(r.Username)" ></mat-checkbox> -->
+                  <tr mat-header-row *matHeaderRowDef=" displayedColumns; sticky: true">
+                  </tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="row.highlighted = !row.highlighted;"
+                    [ngClass]="{ hovered: row.hovered, highlighted: row.highlighted }" (mouseover)="row.hovered = true"
+                    (mouseout)="row.hovered = false"></tr>
+                </table>
+              </div>
+              <!-- end: Table -->
+              <!-- <app-paginator class="d-flex justify-content-between align-items-center flex-wrap" [paginator]="paginator"
+                [isLoading]="isLoading" (paginate)="paginate($event)"></app-paginator> -->
+            </div>
+          </div>
+          
+        </ng-container>
+      </div>
+      <div class="modal-footer dialog-footer">
+        <ng-container>
+          <button mat-raised-button style="float: right; margin: 0; margin-right: 12px;" class="ja_btn-goback "
+          (click)="goBack()">{{'COMMOM.TROLAI' | translate}}</button>
+      </ng-container>
+        <ng-container>
+          <button [disabled]="isLoadingSubmit$ | async" [class.spinner]="isLoadingSubmit$ | async" mat-raised-button
+          style="float: right; margin: 0" class="ja_btn-addnew  " (click)="luuQuyen(false)">{{'COMMOM.LUU' |
+          translate}}</button>
+        </ng-container>
+  
+      </div>     

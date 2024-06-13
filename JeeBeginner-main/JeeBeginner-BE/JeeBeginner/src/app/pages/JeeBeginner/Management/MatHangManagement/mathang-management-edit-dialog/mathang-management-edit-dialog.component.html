@@ -1,0 +1,543 @@
+<div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title h4" id="example-modal-sizes-title-lg">
+        <span class="dialog-title"> {{ getTitle()}}</span>
+      </div>
+      <!-- <div class="modal-title" style="display: inline; flex: 2">
+        <button
+          [class.spinner]="isLoadingSubmit$ | async"
+          [disabled]="isLoadingSubmit$ | async"
+          mat-raised-button
+          style="float: right; margin-right: 12px"
+          class="ja_btn-addnew"
+          (click)="Luu()"
+        >
+          <mat-icon style="color: #ffffff; font-size: 16px" aria-hidden="false">
+            save</mat-icon
+          >
+          {{ "COMMOM.LUU" | translate }}
+        </button>
+        <button
+          mat-raised-button
+          style="
+            float: right;
+            margin-right: 12px;
+            color: #989898;
+            background-color: #f3f1f1;
+          "
+          class="ja_btn-goback"
+          (click)="goBack()"
+        >
+          <mat-icon style="color: #989898; font-size: 16px" aria-hidden="false">
+            west</mat-icon
+          >
+          {{ "COMMOM.TROLAI" | translate }}
+        </button>
+        <button
+          mat-raised-button
+          style="
+            float: right;
+            margin-right: 12px;
+            color: #989898;
+            background-color: #f3f1f1;
+          "
+          class="ja_btn-goback"
+      
+        >
+          <mat-icon style="color: #989898; font-size: 16px" aria-hidden="false">
+            settings</mat-icon
+          >
+          Đặt lại
+        </button>
+      </div> -->
+    </div>
+    <div
+      class="overlay overlay-block cursor-default modal-body overflow-auto"
+      style="min-height: 404px; max-height: 70vh"
+    >
+      <ng-container *ngIf="mathangManagementService.isLoading$ | async">
+        <div class="overlay-layer bg-transparent">
+          <div class="spinner spinner-lg spinner-success"></div>
+        </div>
+      </ng-container>
+      <ng-container>
+        <form action="#" class="form form-label-right" [formGroup]="formGroup">
+
+
+          <div class="kt-form__section kt-form__section--first">
+            <!-- <div class="kt-form__group"> -->
+            <div class="row">
+                <div class="col-md-4 kt-margin-bottom-10-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                        <input (change)="isExistMaHang($event)" matInput #firstInput placeholder="Mã hàng*"
+                            formControlName="maHang" type="text">
+                        <mat-error>Mã hàng<strong> bắt buộc nhập</strong></mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4 kt-margin-bottom-10-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                        <input matInput placeholder="Tên mặt hàng*" formControlName="tenMatHang" type="text">
+                        <mat-error>Tên mặt hàng<strong> bắt buộc nhập</strong></mat-error>
+                    </mat-form-field>
+                </div>
+                <!-- </div> -->
+            </div>
+        </div>
+        <mat-tab-group [(selectedIndex)]="selectedTab">
+            <mat-tab label="Thông tin cơ bản">
+                <ng-template matTabContent>
+                    <div class="kt-form__section kt-form__section--first">
+                        <div class="kt-form__group">
+                            <div class="row">
+                                <div class="col-md-3 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <mat-select placeholder="Loại mặt hàng" formControlName="idLMH">
+                                            <mat-option *ngFor="let tmp of listIdLMH" [value]="tmp.IdLMH">
+                                                {{tmp.TenLMH}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error>Loại mặt hàng<strong> bắt buộc nhập</strong></mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3 kt-margin-bottom-10-mobile">
+                                    <!-- <mat-form-field class="mat-form-field-fluid">
+                                        <mat-select placeholder="Đơn vị tính" formControlName="idDVT">
+                                            <mat-option *ngFor="let tmp of listIdDVT" value="{{tmp.IdDVT}}">
+                                                {{tmp.TenDVT}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error>Đơn vị tính<strong> bắt buộc nhập</strong></mat-error>
+                                    </mat-form-field> -->
+
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <mat-select   placeholder="Đơn vị tính" formControlName="idDVT">
+                                          <mat-option
+                                            *ngFor="let itemkho of listIdDVT"
+                                            [value]="itemkho.IdDVT"
+                                          >
+                                            {{ itemkho.TenDVT }}
+                                          </mat-option>
+                                        </mat-select>
+                                      </mat-form-field>
+                                </div>
+                                <div class="col-md-3 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input matInput placeholder="Số kỳ tính khấu hao tối thiểu" formControlName="SoKyTinhKhauHaoToiThieu"
+                                            type="text" (input)="ValidateChangeNumberEvent($event)"
+                                            (change)="$event ? changeValueOfForm('SoKyTinhKhauHaoToiThieu',$event) : null">
+                                            <mat-error>Số kỳ tính khấu hao tối thiểu<strong> bắt buộc nhập</strong></mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input matInput placeholder="Số kỳ tính khấu hao tối đa" formControlName="SoKyTinhKhauHaoToiDa"
+                                            type="text" (input)="ValidateChangeNumberEvent($event)"
+                                            (change)="$event ? changeValueOfForm('SoKyTinhKhauHaoToiDa',$event) : null">
+                                            <mat-error>Số kỳ tính khấu hao tối đa<strong> bắt buộc nhập</strong></mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3 kt-margin-bottom-10-mobile" style="display: none;">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input matInput placeholder="Số năm đề nghị" formControlName="SoNamDeNghi"
+                                            type="text" (input)="ValidateChangeNumberEvent($event);ChangeSoNamDeNghi($event)"
+                                            (change)="$event ? changeValueOfForm('SoNamDeNghi',$event) : null">
+                                            <mat-error>Số kỳ tính khấu hao<strong> bắt buộc nhập</strong></mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3 kt-margin-bottom-10-mobile" style="display: none;">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input matInput placeholder="Tỉ lệ hao mòn" formControlName="TiLeHaoMon"
+                                            type="text" (input)="ValidateChangeNumberEvent($event)"
+                                            (change)="$event ? changeValueOfForm('TiLeHaoMon',$event) : null">
+                                            <mat-error>Tỉ lệ hao mòn<strong> bắt buộc nhập</strong></mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input matInput placeholder="Tên On Site" formControlName="tenOnSite"
+                                            type="text">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input (input)="ValidateChangeNumberEvent($event)"
+                                            (change)="$event ? changeValueOfForm('vAT',$event) : null" matInput
+                                            placeholder="VAT" formControlName="vAT" type="text">
+                                        <mat-error>VAT<strong> bắt buộc nhập</strong></mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="kt-form__group">
+                            <div class="row">
+                                <div class="col-md-3 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input (input)="ValidateChangeNumberEvent($event)"
+                                            (change)="$event ? changeValueOfForm('giaMua',$event) : null"
+                                            matInput placeholder="Giá mua" formControlName="giaMua" type="text">
+                                        <mat-error>Giá mua<strong> bắt buộc nhập</strong></mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input (input)="ValidateChangeNumberEvent($event)"
+                                            (change)="$event ? changeValueOfForm('giaBan',$event) : null"
+                                            matInput placeholder="Giá bán" formControlName="giaBan" type="text">
+                                        <mat-error>Giá bán<strong> bắt buộc nhập</strong></mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input (input)="ValidateChangeNumberEvent($event)"
+                                            (change)="$event ? changeValueOfForm('lowerLimit',$event) : null"
+                                            matInput placeholder="Định mức tồn tối thiểu"
+                                            formControlName="lowerLimit" type="text">
+                                        <mat-error>Định mức tồn tối thiểu<strong> bắt buộc nhập</strong>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input (input)="ValidateChangeNumberEvent($event)"
+                                            (change)="$event ? changeValueOfForm('upperLimit',$event) : null"
+                                            matInput placeholder="Định mức tồn tối đa"
+                                            formControlName="upperLimit" type="text">
+                                        <mat-error>Định mức tồn tối đa<strong> bắt buộc nhập</strong>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="kt-form__group">
+                            <div class="row">
+                                <div class="col-md-3 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <mat-select placeholder="Đơn vị tính cấp 2" formControlName="idDVTCap2">
+                                            <mat-option *ngFor="let tmp of listIdDVTCap2" [value]="tmp.IdDVT">
+                                                {{tmp.TenDVT}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input (input)="ValidateChangeNumberEvent($event)"
+                                            (change)="$event ? changeValueOfForm('quyDoiDVTCap2',$event) : null"
+                                            matInput placeholder="Quy đổi đơn vị tính cấp 2"
+                                            formControlName="quyDoiDVTCap2" type="text">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <mat-select placeholder="Đơn vị tính cấp 3" formControlName="idDVTCap3">
+                                            <mat-option *ngFor="let tmp of listIdDVTCap3" [value]="tmp.IdDVT">
+                                                {{tmp.TenDVT}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input (input)="ValidateChangeNumberEvent($event)"
+                                            (change)="$event ? changeValueOfForm('quyDoiDVTCap3',$event): null"
+                                            matInput placeholder="Quy đổi đơn vị tính cấp 3"
+                                            formControlName="quyDoiDVTCap3" type="text">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="kt-form__group">
+                            <div class="row">
+                                <!-- <div class="col-md-3 kt-margin-bottom-10-mobile" style="margin: auto 0;">
+                                    <mat-checkbox formControlName="theoDoiTonKho">
+                                        Theo dõi tồn kho
+                                    </mat-checkbox>
+                                </div> -->
+                                <div class="col-md-3 kt-margin-bottom-10-mobile" style="margin: auto 0;">
+                                    <mat-checkbox formControlName="theodoiLo">
+                                        Theo dõi lô
+                                    </mat-checkbox>
+                                </div>
+                                <div class="col-md-3 kt-margin-bottom-10-mobile" style="margin: auto 0;">
+                                    <mat-checkbox formControlName="isTaiSan">
+                                        Là tài sản
+                                    </mat-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="kt-form__group">
+                            <div class="row">
+                                <div class="col-md-6 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input matInput placeholder="Mô tả" formControlName="mota" type="text">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input matInput placeholder="Chi tiết mô tả"
+                                            formControlName="chiTietMoTa" type="text">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </mat-tab>
+            <mat-tab label="Thông tin phụ">
+                <ng-template matTabContent>
+                    <div class="kt-form__section kt-form__section--first">
+                        <div class="kt-form__group">
+                            <div class="row">
+                                <div class="col-md-4 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input matInput placeholder="Mã phụ" formControlName="maPhu"
+                                            type="text">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input matInput placeholder="Barcode" formControlName="barcode"
+                                            type="text" (change)="isExistBarcode($event)">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input matInput placeholder="Thông số" formControlName="thongSo"
+                                            type="text">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="kt-form__group">
+                            <div class="row">
+                                <div class="col-md-4 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <mat-select placeholder="Nhãn hiệu" formControlName="idNhanHieu">
+                                            <mat-option *ngFor="let tmp of listIdNhanHieu"
+                                                [value]="tmp.IdNhanHieu">
+                                                {{tmp.TenNhanHieu}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <mat-select placeholder="Xuất xứ" formControlName="idXuatXu">
+                                            <mat-option *ngFor="let tmp of listIdXuatXu"
+                                                [value]="tmp.IdXuatXu">
+                                                {{tmp.TenXuatXu}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </mat-tab>
+            <mat-tab label="Hình ảnh chính">
+                <ng-template matTabContent>
+                    <div class="kt-form__section kt-form__section--first">
+                        <div class="kt-form__group">
+                            <div class="row">
+                                <!-- <div class="col-md-4 kt-margin-bottom-10-mobile">
+                                        <input
+                                        type="file"
+                                        style="display: none"
+                                        #fileInput
+                                        (change)="onFileSelected($event)"
+                                        formControlName="HinhAnh"
+                                      />
+                                      <button
+                                        mat-raised-button
+                                        class="ja_btn-addnew"
+                                        style="margin-right: 10px"
+                                        (click)="fileInput.click()"
+                                      >
+                                        Chọn hình ảnh
+                                      </button>
+                                      
+                                </div> -->
+                                                                    <!-- <span *ngIf="selectedImageFile">{{ selectedImageFile.name }}</span> -->
+                                <!-- <div class="col-md-4 kt-margin-bottom-10-mobile">
+                                    <input type="file" style="display: none" #fileInput (change)="onFileSelected($event)" formControlName="HinhAnh" />
+                                    <button mat-raised-button class="ja_btn-addnew" style="margin-right: 10px" (click)="fileInput.click()">
+                                        Chọn hình ảnh
+                                    </button>
+                                </div>
+                                <div class="col-md-8">
+
+                                    <img *ngIf="selectedImageUrl" [src]="selectedImageUrl" alt="Selected Image">
+                                </div> -->
+
+                                <!-- <div class="col-md-4 kt-margin-bottom-10-mobile">
+                                    <input type="file" style="display: none" #fileInput (change)="onFileSelected($event)" formControlName="HinhAnh" />
+                                    <button mat-raised-button class="ja_btn-addnew" style="margin-right: 10px" (click)="fileInput.click()">
+                                        Chọn hình ảnh
+                                    </button>
+                                </div>
+                                <div class="col-md-4 kt-margin-bottom-10-mobile" >
+                                    <img width="150px" height="100px" *ngIf="file && file.name" [src]="'../../../../../../assets/media/Img/' + file.name" alt="Selected Image">
+                                </div> -->
+                               
+                                <!-- <div class="col-md-4 kt-margin-bottom-10-mobile">
+                                    <input type="file" style="display: none" #fileInput (change)="onFileSelected($event)" formControlName="HinhAnh" />
+                                    <button mat-raised-button class="ja_btn-addnew" style="margin-right: 10px" (click)="fileInput.click()">
+                                        Chọn hình ảnh
+                                    </button>
+                                </div>
+                                <div class="col-md-4 kt-margin-bottom-10-mobile" *ngFor="let image of item.listLinkImage">
+                                    <img width="150px" height="100px" *ngIf="image.filename" [src]="'../../../../../../assets/media/Img/' + image.filename" alt="Selected Image">
+                                </div> -->
+
+
+                                <div class="col-md-4 kt-margin-bottom-10-mobile">
+                                    <input type="file" style="display: none" #fileInput  (change)="onFileSelected($event)" accept="image/*" />
+                                    <button mat-raised-button class="ja_btn-addnew" style="margin-right: 10px" (click)="fileInput.click()" [disabled]="listAnh.length >= 2">
+                                        Chọn hình ảnh
+                                    </button>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-4 kt-margin-bottom-10-mobile" *ngFor="let image of listAnh; let i = index">
+                                            <div style="position: relative;">
+                                                <span style="position: absolute; top: 0; left: 0; background-color: rgba(255, 255, 255, 0.7); padding: 5px;">{{image.filename}}</span>
+                                                <img width="200px" height="150px" *ngIf="image.filename"  [src]="getImageUrl2(image)" alt="Selected Image">
+                                                <button mat-icon-button color="warn" *ngIf="image.filename" (click)="removeImage(i)" style="position: absolute; bottom: 0; right: 0;">
+                                                    <mat-icon>delete</mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </mat-tab>
+            <!-- <mat-tab label="Hình ảnh chính">
+                <div class="kt-form__section kt-form__section--first">
+                    <div class="kt-form__group">
+                    <input
+                      type="file"
+                      style="display: none"
+                      #fileInput
+                      (change)="onFileSelected($event)"
+                      formControlName="HinhAnh"
+                    />
+                    <button
+                      mat-raised-button
+                      class="ja_btn-addnew"
+                      style="margin-right: 10px"
+                      (click)="fileInput.click()"
+                    >
+                      Chọn hình ảnh
+                    </button>
+                  </div>
+                </div>
+            </mat-tab> -->
+            <mat-tab label="Hình ảnh phụ">
+                          <!-- <div class="form-group row">
+                            <input
+                              type="file"
+                              style="display: none"
+                              #fileInput
+                              (change)="onFileSelected($event)"
+                              formControlName="image2"
+                            />
+                            <button
+                              mat-raised-button
+                              class="ja_btn-addnew"
+                              style="margin-right: 10px"
+                              (click)="fileInput.click()"
+                            >
+                              Chọn hình ảnh
+                            </button>
+                          </div> -->
+            </mat-tab>
+            <!-- <mat-tab label="Khác">
+                <ng-template matTabContent>
+                    <div class="kt-form__section kt-form__section--first">
+                        <div class="kt-form__group">
+                            <div class="row">
+                                <div class="col-md-4 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input matInput placeholder="Mã lưu kho" formControlName="maLuuKho"
+                                            [matAutocomplete]="col">
+                                        <mat-autocomplete #col="matAutocomplete"
+                                            [displayWith]="displayFnidKho.bind(this)">
+                                            <mat-option *ngFor="let tmp of filteredKHOs | async"
+                                                value="{{tmp.IdK}}">
+                                                {{tmp.TenK}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error>Mã kho<strong> bắt buộc nhập</strong></mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4 kt-margin-bottom-10-mobile">
+                                    <mat-form-field class="mat-form-field-fluid">
+                                        <input matInput placeholder="Mã vị trí kho" formControlName="maViTriKho"
+                                            type="text">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4 kt-margin-bottom-10-mobile" style="margin: auto 0;">
+                                    <mat-checkbox formControlName="ngungKinhDoanh">
+                                        Ngừng kinh doanh
+                                    </mat-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </mat-tab> -->
+        </mat-tab-group>
+        </form>
+      </ng-container>
+
+
+      
+    </div>
+    <div class="modal-footer dialog-footer">
+        <ng-container>
+            <button mat-raised-button style="float: right; margin: 0; margin-right: 12px;" class="ja_btn-goback "
+            (click)="goBack()">{{'COMMOM.TROLAI' | translate}}</button>
+      </ng-container>
+      <ng-container *ngIf="!isUpdateMode">
+        <button
+        [class.spinner]="isLoadingSubmit$ | async"
+        [disabled]="isLoadingSubmit$ | async"
+        mat-raised-button
+        id="submitButton"
+        style="float: right; margin: 0; margin-right: 12px;"
+        class="ja_btn-addcontinue"
+        (click)="Luu()"
+      >
+      <mat-icon class="icon-repeat">repeat</mat-icon> Lưu
+      </button>
+      </ng-container>
+        <ng-container *ngIf="isUpdateMode">
+          <button
+          mat-raised-button
+          style="float: right; margin: 0; margin-right: 12px;"
+          class="ja_btn-goback" 
+          (click)="reset()"  
+        >
+          Đặt lại
+        </button>
+        </ng-container>
+        <ng-container *ngIf="isUpdateMode">
+            <button
+            [class.spinner]="isLoadingSubmit$ | async"
+            [disabled]="isLoadingSubmit$ | async"
+            mat-raised-button
+            style="float: right; margin: 0; margin-right: 12px;"
+            class="ja_btn-addnew"
+            (click)="Luu()"
+          >
+          Lưu và Đóng
+          </button>
+      </ng-container>
+      </div>
+  </div>
+  

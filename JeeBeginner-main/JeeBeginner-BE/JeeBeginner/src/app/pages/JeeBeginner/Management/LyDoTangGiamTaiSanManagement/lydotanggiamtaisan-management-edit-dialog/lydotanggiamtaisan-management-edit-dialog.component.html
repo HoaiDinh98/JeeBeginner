@@ -1,0 +1,173 @@
+<div class="modal-content" [ngClass]="{ expanded: isExpanded, collapsed: !isExpanded }">
+    <div class="modal-header">
+      <div class="modal-title h4" id="example-modal-sizes-title-lg">
+        <span class="dialog-title"> {{ getTitle()}}</span>
+      </div>
+      <!-- <div class="modal-title" style="display: inline; flex: 2">
+        <button
+        mat-raised-button
+        style="float: right; margin-right: 12px"
+        class="ja_btn-addnew"
+        (click)="toggleExpand()"
+      >
+      {{ isExpanded ? 'Thu nhỏ' : 'Phóng to' }}
+      </button>
+        <button
+          [class.spinner]="isLoadingSubmit$ | async"
+          [disabled]="isLoadingSubmit$ | async"
+          mat-raised-button
+          style="float: right; margin-right: 12px"
+          class="ja_btn-addnew"
+          (click)="Luu()"
+        >
+          <mat-icon style="color: #ffffff; font-size: 16px" aria-hidden="false">
+            save</mat-icon
+          >
+         Lưu và Đóng
+        </button>
+        <button
+        mat-raised-button
+        style="
+          float: right;
+          margin-right: 12px;
+          color: #989898;
+          background-color: #f3f1f1;
+        "
+        class="ja_btn-goback"
+        (click)="savecontinute()"
+      >
+        <mat-icon style="color: #989898; font-size: 16px" aria-hidden="false">
+          checked</mat-icon
+        >
+        Lưu và tiếp tục
+      </button>
+        <button
+          mat-raised-button
+          style="
+            float: right;
+            margin-right: 12px;
+            color: #989898;
+            background-color: #f3f1f1;
+          "
+          class="ja_btn-goback"
+          (click)="goBack()"
+        >
+          <mat-icon style="color: #989898; font-size: 16px" aria-hidden="false">
+            west</mat-icon
+          >
+          {{ "COMMOM.TROLAI" | translate }}
+        </button>
+      </div> -->
+    </div>
+    <div
+      class="overlay overlay-block cursor-default modal-body overflow-auto"
+      style="min-height: 200px; max-height: 70vh"
+    >
+      <ng-container *ngIf="lydotanggiamtaisanManagementService.isLoading$ | async">
+        <div class="overlay-layer bg-transparent">
+          <div class="spinner spinner-lg spinner-success"></div>
+        </div>
+      </ng-container>
+      <ng-container>
+        <form action="#" class="form form-label-right" [formGroup]="formGroup">
+          <div class="form-group row">
+            <!-- <div class="col-lg-2">
+              <mat-form-field class="example-full-width">
+                <input class="input-batbuoc mat-focused required" required matInput type="text" formControlName="LoaiTangGiam"
+                  placeholder="Loại tăng giảm">
+              </mat-form-field>
+            </div> -->
+            <div class="col-lg-6">
+              <mat-form-field class="example-full-width">
+                <mat-select formControlName="LoaiTangGiam" [value]="1" placeholder="Loại tăng giảm" >
+                  <mat-option [value]="1">Tăng tài sản</mat-option>
+                  <mat-option [value]="2">Giảm tài sản</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+              <mat-form-field class="example-full-width">
+                <input class="input-batbuoc mat-focused required" required matInput type="text" formControlName="MaTangGiam"
+                  placeholder="Mã tăng giảm">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+              <mat-form-field class="example-full-width">
+                <input class="input-batbuoc mat-focused required" required matInput type="text" formControlName="TenTangGiam"
+                  placeholder="Tên tăng giảm">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+              <div class="example-full-width"> 
+                <label style="color: black;">Trạng thái:</label>
+                <mat-checkbox class="example-full-width"  style="margin-left: -30px;margin-top: -15px;" formControlName="TrangThai">
+                 <span style="color: black;">Còn hiệu lực </span>  
+                </mat-checkbox>
+            </div>
+              <!-- <mat-checkbox class="example-full-width" formControlName="TrangThai">
+                Trạng thái
+              </mat-checkbox> -->
+            </div>
+          </div>
+        </form>
+      </ng-container>
+    </div>
+    <div class="modal-footer dialog-footer">
+      <ng-container>
+        <button mat-raised-button style="float: right; margin: 0; margin-right: 12px;" class="ja_btn-goback "
+        (click)="goBack()">{{'COMMOM.TROLAI' | translate}}</button>
+    </ng-container>
+    <ng-container *ngIf="!isUpdateMode">
+      <button
+      [class.spinner]="isLoadingSubmit$ | async"
+      [disabled]="isLoadingSubmit$ | async"
+      mat-raised-button
+      id="submitButton"
+      style="float: right; margin: 0; margin-right: 12px;"
+      class="ja_btn-addcontinue"
+      (click)="Luu()"
+    >
+    <mat-icon class="icon-repeat">repeat</mat-icon> Lưu và Đóng
+    </button>
+    </ng-container>
+    <ng-container *ngIf="isUpdateMode">
+      <button
+      [class.spinner]="isLoadingSubmit$ | async"
+      [disabled]="isLoadingSubmit$ | async"
+      mat-raised-button
+      style="float: right; margin: 0; margin-right: 12px;"
+      class="ja_btn-addnew"
+      (click)="Luu()"
+    >
+    Lưu và Đóng
+    </button>
+  </ng-container>
+      <ng-container *ngIf="isUpdateMode">
+        <button
+        [class.spinner]="isLoadingSubmit$ | async"
+        [disabled]="isLoadingSubmit$ | async"
+        mat-raised-button
+        id="submitButton"
+        style="float: right; margin: 0; margin-right: 12px;"
+        class="ja_btn-addcontinue"
+        (click)="savecontinute()"
+      >
+      <mat-icon class="icon-repeat">repeat</mat-icon>  Lưu và tiếp tục
+
+      </button>
+      </ng-container>
+
+      <ng-container *ngIf="isUpdateMode">     
+         <button
+        mat-raised-button
+        style="float: right; margin-right: 12px"
+        class="ja_btn-addnew"
+        (click)="toggleExpand()"
+      >
+      {{ isExpanded ? 'Thu nhỏ' : 'Phóng to' }}
+      </button>
+    </ng-container>
+
+    </div>
+  </div>
+  

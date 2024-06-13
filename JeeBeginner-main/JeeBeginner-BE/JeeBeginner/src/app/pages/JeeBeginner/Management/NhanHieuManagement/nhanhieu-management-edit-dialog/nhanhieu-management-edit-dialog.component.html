@@ -1,0 +1,103 @@
+<!-- <style>
+.ja_btn-add-close {
+      float: right;
+      margin-right: 12px;
+      color: #ffffff;
+      background-color: #3699ff;
+    }  
+.ja_btn-add-close:hover {
+  background-color: #0e72d8;
+}
+.ja_btn-addnew {
+      float: right;
+      margin: 0;
+      margin-right: 12px;
+      color: #ffffff;
+      background-color: #1bc5bd;
+    }
+.ja_btn-addnew:hover{
+  background-color: #0bb7af;
+}
+</style> -->
+<div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title h4" id="example-modal-sizes-title-lg">
+        <span class="dialog-title"> {{ getTitle()}}</span>
+      </div>
+    </div>
+    <div
+      class="overlay overlay-block cursor-default modal-body "
+      style=" height: 100px;margin-top: -50px;"
+    >
+      <ng-container *ngIf="nhanhieuManagementService.isLoading$ | async">
+        <div class="overlay-layer bg-transparent">
+          <div class="spinner spinner-lg spinner-success"></div>
+        </div>
+      </ng-container>
+      <ng-container>
+        <form action="#" class="form form-label-right" style=" height: 100px;" [formGroup]="formGroup">
+          <div class="form-group row" style=" height: 100px;">
+            <div class="col-lg" style=" height: 100px;">
+              <mat-form-field class="example-full-width" style="margin-top: 19px">
+                <input
+                  class="input-batbuoc mat-focused required"
+                  required
+                  matInput
+                  type="text"
+                  formControlName="tennhanhieu"
+                  placeholder="Tên nhãn hiệu"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+      </ng-container>
+    </div>
+    <div class="modal-footer dialog-footer" style="height: 60px;">
+      <ng-container>
+        <button mat-raised-button style="float: right; margin: 0; margin-right: 12px;" class="ja_btn-goback "
+        (click)="goBack()">{{'COMMOM.TROLAI' | translate}}</button>
+    </ng-container>
+    <ng-container *ngIf="!isUpdateMode">
+      <button
+      [class.spinner]="isLoadingSubmit$ | async"
+      [disabled]="isLoadingSubmit$ | async"
+      mat-raised-button
+      id="submitButton"
+      style="float: right; margin: 0; margin-right: 12px;"
+      class="ja_btn-addcontinue"
+      (click)="Luu()"
+    >
+    <mat-icon class="icon-repeat">repeat</mat-icon>  Lưu và Đóng
+    </button>
+    </ng-container>
+    <ng-container *ngIf="isUpdateMode">
+      <button
+      [class.spinner]="isLoadingSubmit$ | async"
+      [disabled]="isLoadingSubmit$ | async"
+      mat-raised-button
+      style="float: right; margin: 0; margin-right: 12px;"
+      class="ja_btn-addnew"
+      (click)="Luu()"
+    >
+    Lưu và Đóng
+    </button>
+  </ng-container>
+      <ng-container *ngIf="isUpdateMode">
+          <button
+          [class.spinner]="isLoadingSubmit$ | async"
+          [disabled]="isLoadingSubmit$ | async"
+          mat-raised-button
+          id="submitButton"
+          style="float: right; margin: 0; margin-right: 12px;"
+          class="ja_btn-addcontinue"
+          (click)="savecontinute()"
+        >
+        <mat-icon class="icon-repeat">repeat</mat-icon>  Lưu và tiếp tục
+
+        </button>
+      </ng-container>
+
+    </div>
+  </div>
+  
